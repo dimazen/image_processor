@@ -28,12 +28,7 @@ class ImageProcessor < Sinatra::Application
   get '/tasks/:id' do
       param :id, String, required: true
 
-      task = Task.find(params['id'])
-      if task != nil then
-          return json task
-      else
-          raise Mongoid::Errors::DocumentNotFound.new
-      end
+      return json task_by_id! params['id']
   end
 
   post '/tasks' do
@@ -48,12 +43,7 @@ class ImageProcessor < Sinatra::Application
   delete '/tasks/:id' do
       param :id, String, required: true
 
-      task = Task.find(params['id'])
-      if task != nil then
-          task.destroy!
-      else
-          raise Mongoid::Errors::DocumentNotFound.new
-      end
+      task_by_id!(params['id']).destroy!
   end
 
   error Sinatra::Param::InvalidParameterError do
@@ -64,6 +54,17 @@ class ImageProcessor < Sinatra::Application
   error Mongoid::Errors::DocumentNotFound do
     status 404
     { error: "Not found" }.to_s
+  end
+
+  private
+
+  def task_by_id!(id)
+      task = Task.find(params['id'])
+      if task != nil then
+          task
+      else
+          raise Mongoid::Errors::DocumentNotFound.new
+      end
   end
 
 end
