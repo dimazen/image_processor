@@ -28,7 +28,7 @@ class ImageProcessor < Sinatra::Application
   get '/tasks/:id' do
       param :id, String, required: true
 
-      return json task_by_id! params['id']
+      json task_by_id! params['id']
   end
 
   post '/tasks' do
