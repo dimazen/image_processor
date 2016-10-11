@@ -1,0 +1,15 @@
+default: &default
+  clients:
+    default:
+      database: <%= ENV['MONGO_DATABASE'] %>
+      options:
+        user: <%= ENV['MONGO_USER'] %>
+        password: <%= ENV['MONGO_PASSWORD'] %>
+      hosts:
+        - <%= ENV['MONGO_HOST'] %>
+
+production:
+  <<: *default
+
+development:
+  <<: *default
